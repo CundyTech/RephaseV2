@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "defaultProvider": "jsdelivr",
+  "libraries": [
+    {
+      "provider": "cdnjs",
+      "library": "metro@4.2.49",
+      "destination": "wwwroot/lib/metro/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "expressive-css@1.0.2",
+      "destination": "wwwroot/lib/expressive-css/"
+    }
+  ]
+}

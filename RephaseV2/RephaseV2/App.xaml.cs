@@ -1,4 +1,7 @@
 ﻿using System;
+using RephaseV2.Pages;
+using RephaseV2.Services;
+using RephaseV2.Services.Interfaces;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +14,23 @@ namespace RephaseV2
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            ConnectivityManager connectivityManager = new ConnectivityManager();
+            SerialisationHelper serialisationHelper = new SerialisationHelper();
+            LocalStorageHelper localStorageHelper = new LocalStorageHelper();
+            MenuItemHelper menuItemHelper = new MenuItemHelper(serialisationHelper, localStorageHelper);
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper();
+            ImageHelper imageHelper = new ImageHelper(azureStorageHelper);
+            TextToSpeechHelper textToSpeechHelper = new TextToSpeechHelper();
+
+            MainPage = new NavigationPage(
+                new SplashScreenPage(
+                    connectivityManager,
+                    menuItemHelper,
+                    azureStorageHelper,
+                    imageHelper,
+                    textToSpeechHelper,
+                    localStorageHelper,
+                    serialisationHelper));
         }
 
         protected override void OnStart()

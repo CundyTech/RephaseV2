@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RephaseV2.Pages.SplashScreenPage">
+    <ContentPage.Content>
+        <StackLayout Spacing="0">
+            <Label 
+                Text="{Binding WelcomeMessage}"
+                FontSize="30"                   
+                VerticalOptions="CenterAndExpand" 
+                HorizontalOptions="CenterAndExpand">
+            </Label>
+            <Image 
+                Source="drawable/icon.png" 
+                HeightRequest="100">
+            </Image>
+            <Label              
+                Text="{Binding ProgressText}"
+                VerticalOptions="EndAndExpand" 
+                HorizontalOptions="CenterAndExpand">
+            </Label>
+            <ProgressBar
+                Progress="{Binding Progress}"
+                x:Name="ProgressBar"
+                HorizontalOptions="FillAndExpand" 
+                VerticalOptions="StartAndExpand">
+            </ProgressBar>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

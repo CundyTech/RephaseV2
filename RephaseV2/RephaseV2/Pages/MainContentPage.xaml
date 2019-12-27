@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RephaseV2.Pages.MainContentPage">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem x:Name="Settings" Icon="settings.png" Text="Settings" Clicked="Settings_OnClicked"/>
+    </ContentPage.ToolbarItems>
+    <!--<ContentPage.Content>
+        <StackLayout 
+            BackgroundColor="WhiteSmoke" 
+            Orientation="Vertical"
+            Margin="0">
+            <ListView x:Name="ListViewItems"  HasUnevenRows="true" ItemsSource="{Binding Children}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell Tapped="Cell_OnTapped">
+                            <Grid Margin="10,10,10,10" Padding="5" BackgroundColor="White">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="100"/>
+                                </Grid.RowDefinitions>
+                                <Image Source="{Binding LocalImagePath}"
+                                       Grid.Column="3"
+                                       HorizontalOptions="EndAndExpand"
+                                       MinimumWidthRequest="100"
+                                       WidthRequest="100"/>
+                                <Label x:Name="Title"
+                                       Text="{Binding Title}" 
+                                       Grid.Column="1"
+                                       Grid.ColumnSpan="2"
+                                       FontSize="Large" 
+                                       VerticalTextAlignment="Center"
+                                       VerticalOptions="CenterAndExpand" 
+                                       HorizontalOptions="CenterAndExpand" 
+                                       HorizontalTextAlignment="Center">
+                                </Label>
+                                <Button        
+                                    Image="drawable/speak.png"
+                                    Grid.Column="0" 
+                                    WidthRequest="100" 
+                                    MinimumWidthRequest="50" 
+                                    HeightRequest="50" 
+                                    MinimumHeightRequest="50"
+                                    HorizontalOptions="StartAndExpand"                                    
+                                  />
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <StackLayout Orientation="Horizontal" BackgroundColor="DodgerBlue">
+                <Button Text="Please" Clicked="Button_OnClicked" Height="100"></Button>
+                <Button Text="Thank you" Clicked="Button_OnClicked" Height="100"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>-->
+</ContentPage>

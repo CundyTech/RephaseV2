@@ -1,0 +1,61 @@
+﻿@model Rephase_WebClient.Models.HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true">
+
+<style>
+    .img-container img {
+        width: 100px;
+        height: 100px;
+        position: relative;
+    }
+</style>
+<div class="row">
+    <div class="col-3 border-right">
+        <ul data-role="treeview">
+            @{
+                foreach (var menuItem in Model.MenuItems)
+                {
+                    <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@menuItem.Title" data-collapsed="true" onclick="DisplayImage(this);">
+                        <ul>
+                            @foreach (var childItem in menuItem.Child)
+                            {
+                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-caption="@childItem.Title" data-collapsed="true" onclick="DisplayImage(this);">
+                                    @if (childItem.Child.Count > 0)
+                                    {
+                                        <ul>
+                                            @foreach (var item in childItem.Child)
+                                            {
+                                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@item.Title" data-collapsed="true" onclick="DisplayImage(this);"></li>
+                                            }
+                                        </ul>
+                                    }
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </div>
+    <div class="col-9">
+        <div class="row">
+            <div class="img-container thumbnail">
+                <img height="50" width="50" src="images/placeholder-image.png" alt="Image that would be displayed on handheld device">
+                <span class="title">
+                    Click on an image.
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function DisplayImage(element) {
+        var image = element.firstElementChild.firstElementChild.src;
+        var imgContainer = $(".img-container");
+        imgContainer[0].children[0].src = image;
+        imgContainer[0].lastElementChild.innerText = element.innerText;
+    }
+</script>
