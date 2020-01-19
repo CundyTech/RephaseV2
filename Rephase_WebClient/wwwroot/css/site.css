@@ -55,4 +55,33 @@ body {
   line-height: 60px; /* Vertically center the text there */
 }
 
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.flex-item {
+    flex-grow: 1;
+}
+
+.max-w-100 {
+    max-width: 100px;
+}
+.max-h-100 {
+    max-height: 100px;
+}
+
+
+.wordwrap-break {
+    word-wrap: break-word;
+}
+
+/* Override metro style*/
+.list-group-item-action {
+    width: unset !important;
+    color: #495057;
+    text-align: inherit;
+}
+
 

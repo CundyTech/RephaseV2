@@ -24,13 +24,10 @@ namespace Rephase_WebClient.Controllers
                 MenuItems = JsonConvert.DeserializeObject<MenuItems[]>( await azureStorageHelper.DownloadContentJsonAsync())
             };
 
-            //DownloadImages(model.MenuItems);
-
+            //azureStorageHelper.DownloadImages(model.MenuItems);
 
             return View(model);
         }
-
-
 
         public IActionResult Privacy()
         {

@@ -2,37 +2,31 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true">
 
-<style>
-    .img-container img {
-        width: 100px;
-        height: 100px;
-        position: relative;
-    }
-</style>
 <div class="row">
     <div class="col-3 border-right">
+        <h2>Content Tree</h2>
         <ul data-role="treeview">
             @{
                 foreach (var menuItem in Model.MenuItems)
                 {
-                    <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@menuItem.Title" data-collapsed="true" onclick="DisplayImage(this);">
+                    <li class="parentItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@menuItem.Title" data-collapsed="true">
                         <ul>
                             @foreach (var childItem in menuItem.Child)
                             {
-                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-caption="@childItem.Title" data-collapsed="true" onclick="DisplayImage(this);">
+                                <li class="childItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-caption="@childItem.Title" data-collapsed="true">
                                     @if (childItem.Child.Count > 0)
                                     {
                                         <ul>
                                             @foreach (var item in childItem.Child)
                                             {
-                                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@item.Title" data-collapsed="true" onclick="DisplayImage(this);"></li>
+                                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@item.Title" data-collapsed="true" />
                                             }
                                         </ul>
                                     }
                                 </li>
+
                             }
                         </ul>
                     </li>
@@ -40,22 +34,101 @@
             }
         </ul>
     </div>
-    <div class="col-9">
+    <div class="col-9 border-right">
+        <h2>Parent Item</h2>
         <div class="row">
-            <div class="img-container thumbnail">
-                <img height="50" width="50" src="images/placeholder-image.png" alt="Image that would be displayed on handheld device">
-                <span class="title">
-                    Click on an image.
-                </span>
+            <ul id="parent" class="list-group list-group-flush">
+                <li class="list-group-item list-group-item-action list-group-item-secondary"><img height="50" width="50" class="marg-right-5" src="images/placeholder-image.png" /><p id="parent-text">Cras justo odio</p></li>
+            </ul>
+        </div>
+        <h2>Children Items</h2>
+        <div class="row">
+            <div class="flex-container">
+                <ul id="Children" class="list-group list-group-flush flex-container">
+                    <li class="list-group-item list-group-item-action list-group-item-secondary">
+                        <img height="50" width="50" class="marg-right-5" src="images/placeholder-image.png" />
+                        <p id="child-text">Cras justo odio</p>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 </div>
 <script>
-    function DisplayImage(element) {
-        var image = element.firstElementChild.firstElementChild.src;
-        var imgContainer = $(".img-container");
-        imgContainer[0].children[0].src = image;
-        imgContainer[0].lastElementChild.innerText = element.innerText;
+
+    var preventPropagation = false;
+
+    $(document).ready(function() {
+        $(".parentItems").click(function(event) {
+            DisplayParentItem(this, event);
+        });
+        $(".childItems").click(function(event) {
+            DisplayParentItem(this, event);
+        });
+    });
+
+    function DisplayParentItem(element, event) {
+
+        if (event.target === event.currentTarget) {
+
+            var image = element.firstElementChild.firstElementChild.src;
+            var parent = $("#parent");
+            var parentTxt = $("#parent-text");
+            parent[0].children[0].children[0].src = image;
+            parentTxt[0].innerText = element.dataset.caption;
+
+            if (element.children.length > 2) {
+                DisplayChildItems(element.children[2].children, event);
+            } else {
+                RemoveChildItems();
+            }
+
+        }
+    }
+
+    function DisplayChildItems(element, event) {
+
+        var liArray = [];
+
+        for (var i = 0; i < element.length; i++) {
+
+            var listItem = jQuery("<li/>")
+                .addClass(
+                    "list-group-item list-group-item-action list-group-item-secondary flex-item marg-5 max-w-100 max-h-130");
+
+            $('<img/>',
+                    {
+                    }).appendTo(listItem)
+                .attr("src", element[i].children[0].children[0].src)
+                .attr("height", 50)
+                .attr("width", 50)
+                .addClass("marg-right-5");
+
+            $('<p/>',
+                    {
+                    }).appendTo(listItem)
+                .attr("id", "child-text")
+                .text(element[i].dataset.caption)
+                .addClass("wordwrap-break");
+
+            liArray.push(listItem);
+        }
+
+        RemoveChildItems();
+        // Add children.
+        for (var j = 0; j < liArray.length; j++) {
+
+            var t = liArray[j][0];
+            childrenPlaceHolder.appendChild(t);
+        }
+    }
+
+    function RemoveChildItems() {
+        var childrenPlaceHolder = document.getElementById("Children");
+        // Clear existing children first.
+        while (childrenPlaceHolder.firstChild) {
+
+            childrenPlaceHolder.removeChild(childrenPlaceHolder.firstChild);
+        }
     }
 </script>
