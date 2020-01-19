@@ -11,7 +11,7 @@ namespace RephaseV2.Services
 {
     public class AzureStorageHelper : IAzureStorageHelper
     {
-        const string tableConnectionString = "DefaultEndpointsProtocol=https;AccountName=rephasestorage;AccountKey=vBfnFv6jRVqdyalRevqEVeCBDOqUxT15dWN0KkJAyT8sHqS3H6nkOFaN3XPg5wyz8mlcL4RWbXpswCtY2PfZmQ==;EndpointSuffix=core.windows.net";
+        const string tableConnectionString = "";
 
         /// <summary>
         /// Download images from Azure Blob Storage.
