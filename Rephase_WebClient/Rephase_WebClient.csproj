@@ -6,14 +6,24 @@
     <ApplicationIcon />
     <OutputType>Exe</OutputType>
     <StartupObject />
+    <UserSecretsId>fa58d3c2-4a4e-4e8c-975e-92b07be2359d</UserSecretsId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\images\icon.png" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="wwwroot\images\icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,7 +6,7 @@ using RephaseV2.Services.Interfaces;
 
 namespace RephaseV2.Services
 {
-    class SerialisationHelper : ISerialisationHelper
+    public class SerialisationHelper : ISerialisationHelper
     {
         /// <summary>
         /// Serialise menu items to json

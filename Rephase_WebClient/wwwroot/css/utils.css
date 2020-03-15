@@ -1,4 +1,8 @@
-﻿.pad-1 {
+﻿.pad-0 {
+    padding: 0px !important;
+}
+
+.pad-1 {
     padding: 1px;
 }
 
@@ -36,6 +40,18 @@
 
 .pad-10 {
     padding: 10px;
+}
+
+.pad-20 {
+    padding: 20px;
+}
+
+.pad-30 {
+    padding: 30px;
+}
+
+.pad-40 {
+    padding: 40px;
 }
 
 .pad-top-1 {
@@ -76,6 +92,9 @@
 
 .pad-top-10 {
     padding-top: 10px;
+}
+.pad-top-20 {
+    padding-top: 20px;
 }
 
 .pad-left-1 {
@@ -118,6 +137,14 @@
     padding-left: 10px;
 }
 
+.pad-left-40 {
+    padding-left: 40px;
+}
+
+.pad-left-50 {
+    padding-left: 50px;
+}
+
 .pad-bot-1 {
     padding-bottom: 1px;
 }
@@ -158,6 +185,10 @@
     padding-bottom: 10px;
 }
 
+.pad-bot-20 {
+    padding-bottom: 20px;
+}
+
 .pad-right-1 {
     padding-right: 1px;
 }
@@ -196,6 +227,18 @@
 
 .pad-right-10 {
     padding-right: 10px;
+}
+
+.pad-right-40 {
+    padding-right: 40px;
+}
+
+.pad-right-50 {
+    padding-right: 50px;
+}
+
+.marg-0 {
+    margin: 0px !important;
 }
 
 .marg-1 {

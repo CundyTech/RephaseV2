@@ -9,6 +9,6 @@ namespace Rephase_WebClient.Models
     public class HomeViewModel
     {
         public string ContentJson { get; set; }
-        public MenuItems[] MenuItems { get; set; }
+        public List<MenuItems> MenuItems { get; set; }
     }
 }

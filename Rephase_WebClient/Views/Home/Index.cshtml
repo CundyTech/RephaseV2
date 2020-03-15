@@ -1,89 +1,245 @@
-﻿@model Rephase_WebClient.Models.HomeViewModel
+﻿@using System.Web
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model Rephase_WebClient.Models.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
 }
-<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" asp-append-version="true">
 
-<div class="row">
-    <div class="col-3 border-right">
-        <h2>Content Tree</h2>
-        <ul data-role="treeview">
-            @{
-                foreach (var menuItem in Model.MenuItems)
-                {
-                    <li class="parentItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@menuItem.Title" data-collapsed="true">
-                        <ul>
-                            @foreach (var childItem in menuItem.Child)
-                            {
-                                <li class="childItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-caption="@childItem.Title" data-collapsed="true">
-                                    @if (childItem.Child.Count > 0)
-                                    {
-                                        <ul>
-                                            @foreach (var item in childItem.Child)
-                                            {
-                                                <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@item.Title" data-collapsed="true" />
-                                            }
-                                        </ul>
-                                    }
-                                </li>
+<script src="https://kit.fontawesome.com/b6064c97b2.js" crossorigin="anonymous"></script>
 
-                            }
-                        </ul>
-                    </li>
-                }
-            }
-        </ul>
-    </div>
-    <div class="col-9 border-right">
-        <h2>Parent Item</h2>
-        <div class="row">
-            <ul id="parent" class="list-group list-group-flush">
-                <li class="list-group-item list-group-item-action list-group-item-secondary"><img height="50" width="50" class="marg-right-5" src="images/placeholder-image.png" /><p id="parent-text">Cras justo odio</p></li>
+<div class="row body-row">
+    <div class="col-3 border-right marg-0 pad-0">
+        <nav data-role="ribbonmenu" data-role-ribbonmenu="true" class="ribbon-menu">
+            <ul class="tabs-holder">
+                <li class="active"><a href="#section-icon-button">Content Tree</a></li>
             </ul>
+            <div class="content-holder">
+                <div class="section active" id="section-icon-button">
+                    <button class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </span>
+                        <span class="caption">Download</span>
+                    </button>
+                    <button class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </span>
+                        <span class="caption">Upload</span>
+                    </button>
+                    <div class="float-right">
+                        <button class="ribbon-icon-button ">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <span class="caption">Help</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div id="js-content_tree">
+            @await Html.PartialAsync("ContentTree", Model)
         </div>
-        <h2>Children Items</h2>
-        <div class="row">
-            <div class="flex-container">
-                <ul id="Children" class="list-group list-group-flush flex-container">
-                    <li class="list-group-item list-group-item-action list-group-item-secondary">
-                        <img height="50" width="50" class="marg-right-5" src="images/placeholder-image.png" />
-                        <p id="child-text">Cras justo odio</p>
-                    </li>
+    </div>
+    <div class="col-6 border-right marg-0 pad-0">
+        <nav data-role="ribbonmenu" data-role-ribbonmenu="true" class="ribbon-menu">
+            <ul class="tabs-holder">
+                <li class="active"><a href="#section-icon-button">Content Parent Items</a></li>
+            </ul>
+            <div class="content-holder">
+                <div class="section active" id="section-icon-button">
+                    <button class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-trash-alt"></i>
+                        </span>
+                        <span class="caption">Delete</span>
+                    </button>
+                    <button class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-plus-square"></i>
+                        </span>
+                        <span class="caption">Add</span>
+                    </button>
+                    <button class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-cubes"></i>
+                        </span>
+                        <span class="caption">Add Multiple</span>
+                    </button>
+                    <div class="float-right">
+                        <button class="ribbon-icon-button ">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <span class="caption">Help</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="d-inline-block width-100">
+            <div class="row parent-row marg-0 pad-0">
+                <div class="flex-container">
+                    <ul id="parent" class="list-group list-group-flush flex-container d-none">
+                        <li class="js-clickable list-group-item list-group-item-action list-group-item-secondary img-container">
+                            <img height="40" width="40" class="marg-right-5" src="images/placeholder-image.png" />
+                            <p class="wordwrap-break font-size-small pad-0 marg-0" id="parent-text"></p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="child-row marg-0 pad-0">
+            <nav data-role="ribbonmenu" data-role-ribbonmenu="true" class="ribbon-menu">
+                <ul class="tabs-holder">
+                    <li class="active"><a href="#section-icon-button">Content Child Items</a></li>
                 </ul>
+                <div class="content-holder">
+                    <div class="section active" id="section-icon-button">
+                        <button class="ribbon-icon-button">
+                            <span class="icon">
+                                <i class="fas fa-trash-alt"></i>
+                            </span>
+                            <span class="caption">Delete</span>
+                        </button>
+                        <button class="ribbon-icon-button">
+                            <span class="icon">
+                                <i class="fas fa-plus-square"></i>
+                            </span>
+                            <span class="caption">Add</span>
+                        </button>
+                        <button class="ribbon-icon-button">
+                            <span class="icon">
+                                <i class="fas fa-cubes"></i>
+                            </span>
+                            <span class="caption">Add Multiple</span>
+                        </button>
+                        <div class="float-right">
+                            <button class="ribbon-icon-button ">
+                                <span class="icon">
+                                    <i class="fas fa-info-circle"></i>
+                                </span>
+                                <span class="caption">Help</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+            <div class="d-inline-block width-100">
+                <div class="flex-container">
+                    <ul id="Children" class="list-group list-group-flush flex-container">
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
+    <div class="col-3 border-right marg-0 pad-0">
+        <nav data-role="ribbonmenu" data-role-ribbonmenu="true" class="ribbon-menu">
+            <ul class="tabs-holder">
+                <li class="active"><a href="#section-icon-button">Content Items</a></li>
+            </ul>
+            <div class="content-holder">
+                <div class="section active" id="section-icon-button">
+                    <button id="js-editor-save" class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-save"></i>
+                        </span>
+                    </button>
+                    <button id="js-editor-first" class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-angle-double-left"></i>
+                        </span>
+                    </button>
+                    <button id="js-editor-previous" class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-angle-left"></i>
+                        </span>
+                    </button>
+                    <div id="js-editor-count">0 of 0</div>
+                    <button id="js-editor-next" class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-angle-right"></i>
+                        </span>
+                    </button>
+                    <button id="js-editor-last" class="ribbon-icon-button">
+                        <span class="icon">
+                            <i class="fas fa-angle-double-right"></i>
+                        </span>
+                    </button>
+                    <div class="float-right">
+                        <button class="ribbon-icon-button ">
+                            <span class="icon">
+                                <i class="fas fa-info-circle"></i>
+                            </span>
+                            <span class="caption">Help</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        <div class="pad-20">
+            <div class="img-container thumbnail">
+                <img id="js-image" class="img-contraints pad-left-50 pad-right-50 pad-top-20 pad-bot-20" src="images/placeholder-image.png">
+                @*<input id="js-image-filepath" classtype="file" data-role="file" data-button-title="Replace Image" data-prepend="">*@
+                <input id="js-image-filepath" type="file" data-role="file">
+            </div>
+            <p>Title</p>
+            <input type="text" data-role="input" id="js-title">
+            <p>Id</p>
+            <input type="text" data-role="input" id="js-id">
+        </div>
+    </div>
 </div>
+<input id="js-content-json" value="@HttpUtility.HtmlEncode(Model.ContentJson)" type="hidden" />
 <script>
 
     var preventPropagation = false;
 
-    $(document).ready(function() {
-        $(".parentItems").click(function(event) {
-            DisplayParentItem(this, event);
+    // Attach click events
+    $(document).ready(function () {
+        $(".parentItems").click(function (event) {
+            DisplayItems(this, event);
         });
-        $(".childItems").click(function(event) {
-            DisplayParentItem(this, event);
+        $(".childItems").click(function (event) {
+            DisplayItems(this, event);
         });
     });
 
-    function DisplayParentItem(element, event) {
+    function DisplayItems(element, event) {
 
+        ShowItems();
+
+        // Check we action the event we originally clicked on and not a propagated event.
         if (event.target === event.currentTarget) {
 
-            var image = element.firstElementChild.firstElementChild.src;
-            var parent = $("#parent");
-            var parentTxt = $("#parent-text");
-            parent[0].children[0].children[0].src = image;
-            parentTxt[0].innerText = element.dataset.caption;
+            // Build Parent item first.
+            $("#parent")[0].children[0].children[0].src = element.firstElementChild.firstElementChild.src;
+            $("#parent-text")[0].innerText = element.dataset.caption;
+            $("#parent")[0].children[0].children[0].dataset.filepath = element.dataset.filepath;
+            $("#parent")[0].children[0].dataset.id = element.dataset.id;
 
+            // Add children items
             if (element.children.length > 2) {
                 DisplayChildItems(element.children[2].children, event);
             } else {
                 RemoveChildItems();
             }
-
         }
+
+        $(".js-clickable").off("click");
+        $(".js-clickable").on("click", function (event) {
+            var item = $(this);
+            item.toggleClass("selected");
+
+            if (item[0].classList.contains("selected")) {
+                EnqueueInEditor(this);
+            } else {
+                DequeueInEditor(this);
+            }
+
+            event.stopPropagation();
+        });
     }
 
     function DisplayChildItems(element, event) {
@@ -94,28 +250,32 @@
 
             var listItem = jQuery("<li/>")
                 .addClass(
-                    "list-group-item list-group-item-action list-group-item-secondary flex-item marg-5 max-w-100 max-h-130");
+                    "js-clickable list-group-item list-group-item-action list-group-item-secondary flex-item img-container")
+                .attr("data-id", element[i].dataset.id);
 
             $('<img/>',
-                    {
-                    }).appendTo(listItem)
+                {
+                }).appendTo(listItem)
                 .attr("src", element[i].children[0].children[0].src)
-                .attr("height", 50)
+                .attr("height", 40)
                 .attr("width", 50)
-                .addClass("marg-right-5");
+                .addClass("marg-right-5")
+                .attr("data-filepath", element[i].dataset.filepath);
 
             $('<p/>',
-                    {
-                    }).appendTo(listItem)
+                {
+                }).appendTo(listItem)
                 .attr("id", "child-text")
                 .text(element[i].dataset.caption)
-                .addClass("wordwrap-break");
+                .addClass("wordwrap-break pad-0 marg-0 font-size-small");
 
             liArray.push(listItem);
         }
 
         RemoveChildItems();
+
         // Add children.
+        var childrenPlaceHolder = document.getElementById("Children");
         for (var j = 0; j < liArray.length; j++) {
 
             var t = liArray[j][0];
@@ -125,10 +285,16 @@
 
     function RemoveChildItems() {
         var childrenPlaceHolder = document.getElementById("Children");
+
         // Clear existing children first.
         while (childrenPlaceHolder.firstChild) {
 
             childrenPlaceHolder.removeChild(childrenPlaceHolder.firstChild);
         }
+    }
+
+    function ShowItems() {
+        $(".js-itemTitle").removeClass("d-none");
+        $("#parent").removeClass("d-none");
     }
 </script>

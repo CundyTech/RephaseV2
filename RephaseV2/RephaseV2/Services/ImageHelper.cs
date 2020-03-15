@@ -67,7 +67,7 @@ namespace RephaseV2.Services
 
             return urls;
         }
-
+        
         /// <summary>
         /// Download image to local file store.
         /// </summary>

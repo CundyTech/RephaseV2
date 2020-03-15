@@ -11,7 +11,12 @@ namespace RephaseV2.Services
 {
     public class AzureStorageHelper : IAzureStorageHelper
     {
-        const string tableConnectionString = "";
+        private string TableConnectionString = null;
+
+        public AzureStorageHelper(string tableConnectionString)
+        {
+            TableConnectionString = tableConnectionString;
+        }
 
         /// <summary>
         /// Download images from Azure Blob Storage.
@@ -23,7 +28,7 @@ namespace RephaseV2.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(tableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
                 //  create a blob client.
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 //  create a container 
@@ -50,7 +55,7 @@ namespace RephaseV2.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(tableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
                 //  create a blob client.
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 //  create a container 
@@ -75,18 +80,17 @@ namespace RephaseV2.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(tableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
                 // Create the table client.
                 CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
                 // Get a reference to a table named "json"
                 CloudTable jsonTable = tableClient.GetTableReference("json");
-             
+
                 // Create a retrieve operation that takes a customer entity.
                 TableOperation retrieveOperation = TableOperation.Retrieve<AzureTableEntity>("Rephase", "ContentJson_DEV");
 
                 // Execute the operation.
-              
-               TableResult retrievedResult = await jsonTable.ExecuteAsync(retrieveOperation);
+                TableResult retrievedResult = await jsonTable.ExecuteAsync(retrieveOperation);
 
                 Task.WaitAll();
 
@@ -119,7 +123,8 @@ namespace RephaseV2.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(tableConnectionString);
+
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
                 // Create the table client.
                 CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
                 // Get a reference to a table named "json"

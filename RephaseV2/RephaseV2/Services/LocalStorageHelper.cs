@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RephaseV2.Services
 {
-    internal class LocalStorageHelper : ILocalStorageHelper
+    public class LocalStorageHelper : ILocalStorageHelper
     {
         /// <summary>
         /// Retrieve local storage path, create directory if it doesn't exist.
@@ -23,7 +23,7 @@ namespace RephaseV2.Services
             IFolder rootFolder = fileSystem.LocalStorage;
 
             // Create folder, if it doesn't already exist.
-           // IFolder localStoragePath = await rootFolder.CreateFolderAsync("Content", CreationCollisionOption.OpenIfExists);
+            // IFolder localStoragePath = await rootFolder.CreateFolderAsync("Content", CreationCollisionOption.OpenIfExists);
 
             return rootFolder.Path;
         }
@@ -64,7 +64,7 @@ namespace RephaseV2.Services
                     AdaptContentJsonToLocalUrl(items[i].Child, jsonFilePath);
                 }
             }
-          
+
         }
 
         /// <summary>

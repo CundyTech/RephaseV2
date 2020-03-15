@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RephaseV2.Services;
+using RephaseV2.Services.Interfaces;
 
 namespace Rephase_WebClient
 {
@@ -30,7 +32,11 @@ namespace Rephase_WebClient
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
+           
+            services.AddScoped<ISerialisationHelper, SerialisationHelper>();
+            services.AddScoped<IMenuItemHelper, MenuItemHelper>();
+            services.AddScoped<ILocalStorageHelper, LocalStorageHelper>();
+          
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
         

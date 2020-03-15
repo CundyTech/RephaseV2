@@ -19,5 +19,7 @@ namespace RephaseV2.Services.Interfaces
         /// <param name="parentKey"></param>
         /// <returns></returns>
         List<MenuItems> GetChild(string parentKey);
+
+        List<MenuItems> SearchForMenuItem(List<MenuItems> menuItems, string title);
     }
 }

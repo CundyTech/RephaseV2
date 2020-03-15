@@ -7,7 +7,7 @@
     <meta name="metro4:locale" content="de-DE">
     <meta name="metro4:week_start" content="1">
 
-    <title>@ViewData["Title"] - Rephase_WebClient</title>
+    <title>@ViewData["Title"] - Rephase Web Client</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -39,19 +39,25 @@
         </script>
     </environment>
 
-    <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/lib/metro/js/metro.js" asp-append-version="true"></script>
-
+    <script src="~/js/editor.js" asp-append-version="true"></script>
+    <script src="~/js/content_tree.js" asp-append-version="true"></script>
+    <script src="~/js/content_manager.js" asp-append-version="true"></script>
     <link href="~/lib/metro/css/metro-all.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/css/utils.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js" asp-append-version="true"></script>
+  
 
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 marg-0 pad-0 ">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Rephase_WebClient</a>
+                <a class="navbar-brand font-size-larger" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/icon.png" width="30" height="30" alt="">
+                    Rephase Content Manager
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -69,21 +75,12 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="container marg-0">
         <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2019 - Rephase_WebClient - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>
-
-   
-
     @RenderSection("Scripts", required: false)
 </body>
 </html>

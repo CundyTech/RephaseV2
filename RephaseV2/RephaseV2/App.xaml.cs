@@ -18,7 +18,7 @@ namespace RephaseV2
             SerialisationHelper serialisationHelper = new SerialisationHelper();
             LocalStorageHelper localStorageHelper = new LocalStorageHelper();
             MenuItemHelper menuItemHelper = new MenuItemHelper(serialisationHelper, localStorageHelper);
-            AzureStorageHelper azureStorageHelper = new AzureStorageHelper();
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(null); //todo implement some kind of local secret store.
             ImageHelper imageHelper = new ImageHelper(azureStorageHelper);
             TextToSpeechHelper textToSpeechHelper = new TextToSpeechHelper();
 

@@ -4,29 +4,58 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Rephase_WebClient.Models;
 using RephaseV2.Models;
 using RephaseV2.Services;
-using JsonConverter = System.Text.Json.Serialization.JsonConverter;
+using RephaseV2.Services.Interfaces;
 
 namespace Rephase_WebClient.Controllers
 {
     public class HomeController : Controller
     {
+        private IConfiguration _configuration;
+        private IMenuItemHelper _menuItemHelper;
+
+        public HomeController(IConfiguration configuration, IMenuItemHelper menuItemHelper)
+        {
+            _configuration = configuration;
+            _menuItemHelper = menuItemHelper;
+        }
+
         public async Task<IActionResult> Index()
         {
-            AzureStorageHelper azureStorageHelper = new AzureStorageHelper();
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(_configuration["TableStorageConnString"]);
+
+            string json = await azureStorageHelper.DownloadContentJsonAsync();
+            List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
+            menuItems = AddGuidId(menuItems);
 
             HomeViewModel model = new HomeViewModel
             {
-                ContentJson = await azureStorageHelper.DownloadContentJsonAsync(),
-                MenuItems = JsonConvert.DeserializeObject<MenuItems[]>( await azureStorageHelper.DownloadContentJsonAsync())
+                ContentJson = json,
+                MenuItems = menuItems
             };
 
             //azureStorageHelper.DownloadImages(model.MenuItems);
 
             return View(model);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateContentTree(string json)
+        {
+            List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
+
+            //List<MenuItems> foundMenuItem = _menuItemHelper.SearchForMenuItem();
+
+            HomeViewModel model = new HomeViewModel
+            {
+                MenuItems = menuItems
+            };
+
+            return PartialView("ContentTree", model);
         }
 
         public IActionResult Privacy()
@@ -38,6 +67,24 @@ namespace Rephase_WebClient.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        private List<MenuItems> AddGuidId(List<MenuItems> menuItems)
+        {
+            foreach (MenuItems items in menuItems)
+            {
+                if (items.Id == null)
+                {
+                    items.Id = Guid.NewGuid();
+                }
+
+                if (items.Child.Count > 0)
+                {
+                    AddGuidId(items.Child);
+                }
+            }
+
+            return menuItems;
         }
     }
 }

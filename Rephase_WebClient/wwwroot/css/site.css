@@ -2,57 +2,60 @@
 for details on configuring this project to bundle and minify static web assets. */
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
+
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 .border-top {
-  border-top: 1px solid #e5e5e5;
+    border-top: 1px solid #e5e5e5;
 }
+
 .border-bottom {
-  border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
 }
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
 button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+    font-size: 1rem;
+    line-height: inherit;
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
 body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
 }
+
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  /* Set the fixed height of the footer here */
-  height: 60px;
-  line-height: 60px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
 }
 
 .flex-container {
@@ -68,6 +71,7 @@ body {
 .max-w-100 {
     max-width: 100px;
 }
+
 .max-h-100 {
     max-height: 100px;
 }
@@ -79,9 +83,65 @@ body {
 
 /* Override metro style*/
 .list-group-item-action {
-    width: unset !important;
-    color: #495057;
     text-align: inherit;
+    height: 100px;
+    width: 100px !important;
+    max-height: 100px;
+    max-width: 100px !important;
+    margin: 10px;
+    cursor: pointer;
+    background-color: #f5f6f7;
+    border: 1px solid #dadbdc !important;
+    text-align: center;
 }
 
+.ribbon-menu .tabs-holder {
+    background-color: #f5f6f7;
+    border-top: 1px solid #dadbdc !important;
+}
 
+#horizontal-titles {
+    height: calc(100vh);
+    width: 20px;
+    background-color: lightgrey;
+}
+
+.itemTitle {
+    padding-left: 15px;
+}
+
+.font-size-small {
+    font-size: small
+}
+
+.navbar {
+    background-color: #f5f6f7 !important;
+}
+
+.container {
+    max-width: unset !important;
+}
+
+.body-row {
+    height: calc(100vh - 113px);
+}
+
+.parent-row {
+    height: 150px;
+}
+
+.child-row {
+    overflow-x: auto;
+    /*height: calc(100vh - 200px);*/
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.img-contraints {
+    max-width: 200px;
+    max-height: 200px;
+    width: 200px;
+    height: 200px;
+}

@@ -6,7 +6,7 @@ using RephaseV2.Services.Interfaces;
 
 namespace RephaseV2.Services
 {
-    class MenuItemHelper : IMenuItemHelper
+    public class MenuItemHelper : IMenuItemHelper
     {
         ISerialisationHelper SerialisationHelper;
         ILocalStorageHelper LocalStorageHelper;
@@ -14,6 +14,24 @@ namespace RephaseV2.Services
         {
             SerialisationHelper = serialisationHelper;
             LocalStorageHelper = localStorageHelper;
+        }
+
+        public List<MenuItems> SearchForMenuItem(List<MenuItems> menuItems, string title)
+        {
+            List<MenuItems> foundMenuItems = new List<MenuItems>();
+            for (int i = 0; i < menuItems.Count; i++)
+            {
+                if (menuItems[i].Title == title)
+                {
+                    foundMenuItems.Add(menuItems[i]);
+                }
+                if (menuItems[i].Child.Count > 0)
+                {
+                    SearchForMenuItem(menuItems[i].Child, title);
+                }
+            }
+
+            return foundMenuItems;
         }
 
         ///// <summary>
