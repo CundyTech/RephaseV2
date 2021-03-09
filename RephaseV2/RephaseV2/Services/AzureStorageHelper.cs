@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -11,11 +12,11 @@ namespace RephaseV2.Services
 {
     public class AzureStorageHelper : IAzureStorageHelper
     {
-        private string TableConnectionString = null;
+        private IConfiguration _configuration;
 
-        public AzureStorageHelper(string tableConnectionString)
+        public AzureStorageHelper(IConfiguration configuration)
         {
-            TableConnectionString = tableConnectionString;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -28,7 +29,7 @@ namespace RephaseV2.Services
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration["TableStorageConnString"]);
                 //  create a blob client.
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 //  create a container 
@@ -51,11 +52,11 @@ namespace RephaseV2.Services
         /// <param name="filepath"></param>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        public async Task UploadBlobAsync(string filepath, string fileName)
+        public async Task UploadBlobFromLocalAsync(string filepath, string fileName)
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration["TableStorageConnString"]);
                 //  create a blob client.
                 CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
                 //  create a container 
@@ -73,14 +74,43 @@ namespace RephaseV2.Services
         }
 
         /// <summary>
-        /// Download content json from azure storage.
+        /// Uploads file from local storage to a temporary storage location in Azure Blob Storage.
+        /// </summary>
+        /// <param name="fileStream"></param>
+        /// <param name="fileName"></param>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
+        public async Task UploadBlobFromWebAsync(Stream fileStream, string fileName, Guid sessionId)
+        {
+            try
+            {
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration["TableStorageConnString"]);
+                // Create a blob client.
+                CloudBlobClient blobClient = storageAccount.CreateCloudBlobClient();
+                // Create a container 
+                CloudBlobContainer container = blobClient.GetContainerReference("temp-images");
+                await container.CreateIfNotExistsAsync();
+                // Create a block blob.
+                CloudBlockBlob blockBlob = container.GetBlockBlobReference($"{sessionId}/{fileName}");
+                blockBlob.Properties.ContentType = "image/jpg";
+                // download blob               
+                await blockBlob.UploadFromStreamAsync(fileStream);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        /// <summary>
+        /// Upload content json from azure storage.
         /// </summary>
         /// <returns></returns>
         public async void UploadContentJsonAsync(string json)
         {
             try
             {
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration["TableStorageConnString"]);
                 // Create the table client.
                 CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
                 // Get a reference to a table named "json"
@@ -124,7 +154,7 @@ namespace RephaseV2.Services
             try
             {
 
-                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(TableConnectionString);
+                CloudStorageAccount storageAccount = CloudStorageAccount.Parse(_configuration["TableStorageConnString"]);
                 // Create the table client.
                 CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
                 // Get a reference to a table named "json"

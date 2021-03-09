@@ -6,29 +6,34 @@
 }
 
 <script src="https://kit.fontawesome.com/b6064c97b2.js" crossorigin="anonymous"></script>
-
 <div class="row body-row">
-    <div class="col-3 border-right marg-0 pad-0">
+  <div class="col-3 border-right marg-0 pad-0">
         <nav data-role="ribbonmenu" data-role-ribbonmenu="true" class="ribbon-menu">
             <ul class="tabs-holder">
                 <li class="active"><a href="#section-icon-button">Content Tree</a></li>
             </ul>
             <div class="content-holder">
-                <div class="section active" id="section-icon-button">
+                <div class="section active" id="ct-download-btn">
                     <button class="ribbon-icon-button">
                         <span class="icon">
                             <i class="fas fa-cloud-download-alt"></i>
                         </span>
                         <span class="caption">Download</span>
                     </button>
-                    <button class="ribbon-icon-button">
+                    <button class="ribbon-icon-button" id="ct-upload-btn">
                         <span class="icon">
                             <i class="fas fa-cloud-upload-alt"></i>
                         </span>
                         <span class="caption">Upload</span>
                     </button>
+                    <button class="ribbon-icon-button" id="ct-add-btn">
+                        <span class="icon">
+                            <i class="fas fa-plus-square"></i>
+                        </span>
+                        <span class="caption">Add</span>
+                    </button>
                     <div class="float-right">
-                        <button class="ribbon-icon-button ">
+                        <button class="ribbon-icon-button" id="ct-help-btn">
                             <span class="icon">
                                 <i class="fas fa-info-circle"></i>
                             </span>
@@ -180,7 +185,7 @@
         </nav>
         <div class="pad-20">
             <div class="img-container thumbnail">
-                <img id="js-image" class="img-contraints pad-left-50 pad-right-50 pad-top-20 pad-bot-20" src="images/placeholder-image.png">
+                <img id="js-image" class="img-contraints pad-left-50 pad-right-50 pad-top-20 pad-bot-20" src="/images/placeholder-image.png">
                 @*<input id="js-image-filepath" classtype="file" data-role="file" data-button-title="Replace Image" data-prepend="">*@
                 <input id="js-image-filepath" type="file" data-role="file">
             </div>
@@ -192,109 +197,4 @@
     </div>
 </div>
 <input id="js-content-json" value="@HttpUtility.HtmlEncode(Model.ContentJson)" type="hidden" />
-<script>
 
-    var preventPropagation = false;
-
-    // Attach click events
-    $(document).ready(function () {
-        $(".parentItems").click(function (event) {
-            DisplayItems(this, event);
-        });
-        $(".childItems").click(function (event) {
-            DisplayItems(this, event);
-        });
-    });
-
-    function DisplayItems(element, event) {
-
-        ShowItems();
-
-        // Check we action the event we originally clicked on and not a propagated event.
-        if (event.target === event.currentTarget) {
-
-            // Build Parent item first.
-            $("#parent")[0].children[0].children[0].src = element.firstElementChild.firstElementChild.src;
-            $("#parent-text")[0].innerText = element.dataset.caption;
-            $("#parent")[0].children[0].children[0].dataset.filepath = element.dataset.filepath;
-            $("#parent")[0].children[0].dataset.id = element.dataset.id;
-
-            // Add children items
-            if (element.children.length > 2) {
-                DisplayChildItems(element.children[2].children, event);
-            } else {
-                RemoveChildItems();
-            }
-        }
-
-        $(".js-clickable").off("click");
-        $(".js-clickable").on("click", function (event) {
-            var item = $(this);
-            item.toggleClass("selected");
-
-            if (item[0].classList.contains("selected")) {
-                EnqueueInEditor(this);
-            } else {
-                DequeueInEditor(this);
-            }
-
-            event.stopPropagation();
-        });
-    }
-
-    function DisplayChildItems(element, event) {
-
-        var liArray = [];
-
-        for (var i = 0; i < element.length; i++) {
-
-            var listItem = jQuery("<li/>")
-                .addClass(
-                    "js-clickable list-group-item list-group-item-action list-group-item-secondary flex-item img-container")
-                .attr("data-id", element[i].dataset.id);
-
-            $('<img/>',
-                {
-                }).appendTo(listItem)
-                .attr("src", element[i].children[0].children[0].src)
-                .attr("height", 40)
-                .attr("width", 50)
-                .addClass("marg-right-5")
-                .attr("data-filepath", element[i].dataset.filepath);
-
-            $('<p/>',
-                {
-                }).appendTo(listItem)
-                .attr("id", "child-text")
-                .text(element[i].dataset.caption)
-                .addClass("wordwrap-break pad-0 marg-0 font-size-small");
-
-            liArray.push(listItem);
-        }
-
-        RemoveChildItems();
-
-        // Add children.
-        var childrenPlaceHolder = document.getElementById("Children");
-        for (var j = 0; j < liArray.length; j++) {
-
-            var t = liArray[j][0];
-            childrenPlaceHolder.appendChild(t);
-        }
-    }
-
-    function RemoveChildItems() {
-        var childrenPlaceHolder = document.getElementById("Children");
-
-        // Clear existing children first.
-        while (childrenPlaceHolder.firstChild) {
-
-            childrenPlaceHolder.removeChild(childrenPlaceHolder.firstChild);
-        }
-    }
-
-    function ShowItems() {
-        $(".js-itemTitle").removeClass("d-none");
-        $("#parent").removeClass("d-none");
-    }
-</script>

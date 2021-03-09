@@ -23,6 +23,13 @@ namespace RephaseV2.Models
         /// Local path of image.
         /// </summary>
         public string LocalImagePath { get; set; }
+        /// <summary>
+        /// Children Menu Items.
+        /// </summary>
         public List<MenuItems> Child { get; set; }
+        /// <summary>
+        /// The position of item.
+        /// </summary>
+        public int Position { get; set; }
     }
 }

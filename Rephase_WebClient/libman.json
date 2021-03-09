@@ -6,6 +6,11 @@
       "provider": "cdnjs",
       "library": "metro@4.2.49",
       "destination": "wwwroot/lib/metro/"
+    },
+    {
+      "provider": "cdnjs",
+      "library": "dropzone@5.7.2",
+      "destination": "wwwroot/lib/dropzone/"
     }
   ]
 }

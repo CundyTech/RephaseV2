@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 
 namespace RephaseV2.Services.Interfaces
 {
@@ -17,10 +19,10 @@ namespace RephaseV2.Services.Interfaces
         /// </summary>
         /// <param name="filepath"></param>
         /// <param name="fileName"></param>
-        Task UploadBlobAsync(string filepath, string fileName);
+        Task UploadBlobFromLocalAsync(string filepath, string fileName);
 
         /// <summary>
-        /// Download content json from azure storage.
+        /// Upload content json from azure storage.
         /// </summary>
         /// <returns></returns>
         void UploadContentJsonAsync(string json);
@@ -30,5 +32,7 @@ namespace RephaseV2.Services.Interfaces
         /// </summary>
         /// <returns></returns>
         Task<string> DownloadContentJsonAsync();
+
+        Task UploadBlobFromWebAsync(Stream fileStream, string fileName, Guid sessionId);
     }
 }

@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using RephaseV2.Services;
 using RephaseV2.Services.Interfaces;
 
@@ -35,17 +36,19 @@ namespace Rephase_WebClient
            
             services.AddScoped<ISerialisationHelper, SerialisationHelper>();
             services.AddScoped<IMenuItemHelper, MenuItemHelper>();
-            services.AddScoped<ILocalStorageHelper, LocalStorageHelper>();
+            services.AddScoped<IAzureStorageHelper, AzureStorageHelper>();
+            services.AddScoped<ILocalStorageHelper, LocalStorageHelper>(); 
           
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
         
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                //app.UseDeveloperExceptionPage();
+                app.UseExceptionHandler("/Home/Error");
             }
             else
             {

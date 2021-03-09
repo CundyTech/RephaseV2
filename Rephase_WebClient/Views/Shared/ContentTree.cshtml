@@ -4,22 +4,21 @@
     @{
         foreach (var menuItem in Model.MenuItems)
         {
-            <li class="parentItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@menuItem.Title" data-filepath="@menuItem.LocalImagePath" data-id="@menuItem.Id" data-collapsed="true">
+            <li class="parentItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@menuItem.LocalImagePath'/>" data-caption="@string.Concat(menuItem.Title,"<span class=\"js-selectedCountBadge marg-5 badge inline bg-red fg-white\" style=\"visibility: hidden;\">0</span>")" data-title="@menuItem.Title" data-filepath="@menuItem.LocalImagePath" data-id="@menuItem.Id" data-collapsed="true">
                 <ul>
                     @foreach (var childItem in menuItem.Child)
                     {
-                        <li class="childItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-filepath="@childItem.LocalImagePath" data-caption="@childItem.Title" data-id="@childItem.Id" data-collapsed="true">
+                        <li class="childItems" data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@childItem.LocalImagePath'>" data-filepath="@childItem.LocalImagePath" data-caption="@string.Concat(childItem.Title,"<span class=\"js-selectedCountBadge marg-5 badge inline bg-red fg-white\" style=\"visibility: hidden;\">0</span>")" data-title="@childItem.Title" data-id="@childItem.Id" data-collapsed="true">
                             @if (childItem.Child.Count > 0)
                             {
                                 <ul>
                                     @foreach (var item in childItem.Child)
                                     {
-                                        <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@item.Title" data-filepath="@item.LocalImagePath"  data-id="@item.Id" data-collapsed="true" />
+                                        <li data-icon="<img src='https://rephasestorage.blob.core.windows.net/images/@item.LocalImagePath'>" data-caption="@string.Concat(item.Title,"<span class=\"js-selectedCountBadge marg-5 badge inline bg-red fg-white\" style=\"visibility: hidden;\">0</span>")" data-title="@item.Title" data-filepath="@item.LocalImagePath"  data-id="@item.Id" data-collapsed="true" />
                                     }
                                 </ul>
                             }
                         </li>
-
                     }
                 </ul>
             </li>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -17,20 +18,23 @@ namespace Rephase_WebClient.Controllers
     {
         private IConfiguration _configuration;
         private IMenuItemHelper _menuItemHelper;
+        private IAzureStorageHelper _azureStorageHelper;
 
-        public HomeController(IConfiguration configuration, IMenuItemHelper menuItemHelper)
+        public HomeController(IConfiguration configuration, IMenuItemHelper menuItemHelper, IAzureStorageHelper azureStorageHelper)
         {
             _configuration = configuration;
             _menuItemHelper = menuItemHelper;
+            _azureStorageHelper = azureStorageHelper;
         }
 
         public async Task<IActionResult> Index()
         {
-            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(_configuration["TableStorageConnString"]);
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(_configuration);
 
             string json = await azureStorageHelper.DownloadContentJsonAsync();
             List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
             menuItems = AddGuidId(menuItems);
+            json = JsonConvert.SerializeObject(menuItems);
 
             HomeViewModel model = new HomeViewModel
             {
@@ -44,17 +48,65 @@ namespace Rephase_WebClient.Controllers
         }
 
         [HttpPost]
-        public IActionResult UpdateContentTree(string json)
+        public async Task<IActionResult> UploadContentJson([FromBody] string data)
         {
-            List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
+            try
+            {
+                if (string.IsNullOrWhiteSpace(data))
+                {
+                    return BadRequest();
+                }
 
-            //List<MenuItems> foundMenuItem = _menuItemHelper.SearchForMenuItem();
+                List<MenuItems> menuItems;
+                if (data.Length > 0)
+                {
+                    menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(HttpUtility.HtmlDecode(data));
+                    _azureStorageHelper.UploadContentJsonAsync(HttpUtility.HtmlDecode(data));
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                throw;
+            }
+
+            return Ok();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> ReloadContentTreeAsync()
+        {
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(_configuration);
+
+            string json = await azureStorageHelper.DownloadContentJsonAsync();
+            List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
+            menuItems = AddGuidId(menuItems);
+            json = JsonConvert.SerializeObject(menuItems);
 
             HomeViewModel model = new HomeViewModel
             {
+                ContentJson = json,
                 MenuItems = menuItems
             };
 
+            return PartialView("ContentTree", model);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DownloadContentJsonAsync()
+        {
+            AzureStorageHelper azureStorageHelper = new AzureStorageHelper(_configuration);
+
+            string json = await azureStorageHelper.DownloadContentJsonAsync();
+            List<MenuItems> menuItems = JsonConvert.DeserializeObject<List<MenuItems>>(json);
+            menuItems = AddGuidId(menuItems);
+            json = JsonConvert.SerializeObject(menuItems);
+
+            HomeViewModel model = new HomeViewModel
+            {
+                ContentJson = json,
+                MenuItems = menuItems
+            };
             return PartialView("ContentTree", model);
         }
 
